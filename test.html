@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Loading</title>
+	<style type="text/css">
+		*{
+			margin: 0px;
+			padding: 0px;
+		}
+		html,body{
+			width:100%;
+			height: 100%;
+		}
+		.load{
+			width:100%;
+			height:100%;
+			position:fixed;
+			top:0;
+			left:0;
+			background-color:#000;
+			perspective: 600px;
+		}
+		.load .load-i{
+			width:10px;
+			height:10px;
+			border:1px solid #fff;
+			border-radius:50%;
+			box-shadow: 0 0 10px #fff inset;
+			position: absolute;
+			top:5%;
+			left:50%;
+			margin-left:-5px;
+		}
+		.load .load-o{
+			width:10px;
+			height:10px;
+			border:1px solid #fff;
+			border-radius:50%;
+			position: absolute;
+			top: 55%;
+			left:50%;
+			margin-left:-5px;
+			transform:rotateX(90deg);
+			box-shadow: 0 0 2px #fff;
+		}
+
+		@keyframes ani {
+			0% {
+				top:5%;
+			}
+			95% {
+				top:55%;
+				opacity: 1;
+			}
+			100% {
+				top:55%;
+				opacity: 0;
+			}
+		}
+
+		@keyframes ano {
+			from {
+				width:10px;
+				height:10px;
+				margin-left:-5px;
+				opacity: 1;
+			}
+			to {
+				width:1000px;
+				height:1000px;
+				margin-left:-500px;
+				margin-top:-420px;
+				opacity: 0.1;
+			}
+		}
+	</style>
+	<script type="text/javascript">
+		var Load = (function(){
+			function Load(itime,otime){
+				this.dom = document.createElement('div');
+				this.dom.className = 'load';
+				this.itime = itime || 1000;
+				this.otime = otime || 2000;
+			};
+
+			Load.prototype.add = function(dom) {
+				document.body.appendChild(this.dom);
+				this.load_i();
+				this.loading()
+			};
+
+			Load.prototype.remove = function(dom) {
+				document.body.removeChild(this.dom);
+			};
+
+			Load.prototype.load_i = function() {
+				var _i = document.createElement('p');
+				_i.className = 'load-i';
+				_i.style.animation = this.itime/1000 + 's ani ease-in infinite';
+
+				this.dom.appendChild(_i);
+
+				setTimeout(function(){
+					this.dom.removeChild(_i)
+					this.load_o();
+				}.bind(this),this.itime)
+			};
+
+			Load.prototype.load_o = function() {
+				var _o = document.createElement('div');
+				_o.className = 'load-o';
+				_o.style.animation = this.otime/1000 + 's ano ease-out infinite';
+
+				this.dom.appendChild(_o)
+
+				setTimeout(function(){
+					this.dom.removeChild(_o)
+				}.bind(this),this.otime)
+			};
+
+			Load.prototype.loading = function() {
+				this.inval = setInterval(this.load_i.bind(this), this.itime/5)
+			};
+
+			return Load;
+		}())
+		var load = new Load(2000,4000)
+
+	</script>
+</head>
+<body>
+
+	<script type="text/javascript">
+		load.add()
+	</script>
+</body>
+</html>
